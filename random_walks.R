@@ -54,6 +54,23 @@ tseries$t <- 1:N
 
 ggplot(data = tseries,
        aes(x = t)) +
-  geom_line(aes(y = S1)) +
-  geom_line(aes(y = S2)) +
-  geom_line(aes(y = S3))
+  theme_classic() +
+  theme(
+    
+    panel.grid.major.y = element_line(color = "black",
+                                      linetype = "dotted",
+                                      size = 0.1),
+    panel.grid.minor.y = element_line(color = "black",
+                                      linetype = "dotted")
+  ) +
+  xlab("Time") +
+  ylab("Values at time t") +
+  geom_line(aes(y = S1,
+                color = rgb(viridis.map[runif(1,1,nrow(viridis.map)),1:3])),
+            show.legend = F) +
+  geom_line(aes(y = S2,
+                color = rgb(viridis.map[runif(1,1,nrow(viridis.map)),1:3])),
+            show.legend = F) +
+  geom_line(aes(y = S3,
+                color = rgb(viridis.map[runif(1,1,nrow(viridis.map)),1:3])),
+            show.legend = F)
