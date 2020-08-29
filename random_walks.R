@@ -30,45 +30,59 @@ ggplot(data = tserie,
 
 # ---- function for several random walks ----
 
-# set lenght of the series
-N = 1000
-repetitions = 3
-tseries <- NULL
-# create a random serie
 
-for(i in 1:repetitions){
+rw <- function(n = 1000, repetitions = 3){
+
+  # this function creates a number of random walks of length n
   
-  x <- e <- rnorm(n = N)
-  # generate random walk
-  for (t in 2:N){
-    x[t] <- x[t-1] + e[t]
+  tseries = NULL
+
+  # let's create a random serie
+  for(i in 1:repetitions){
+    x <- e <- rnorm(n)
+    
+    # generate random walks
+    for(t in 2:n){
+      x[t] <- x[t - 1] + e[t]
+    }
+    
+    x <- as.data.frame(x)
+    
+    tseries <- bind_cols(tseries, x)
+    
   }
   
+  # name the series
+  colnames(tseries) <- sprintf("S%s", seq(1:repetitions))
   
-  x <- as.data.frame(x)
+  # create a time variable
+  tseries$t <- 1:n
   
-  tseries <- bind_cols(tseries, x)
+  # create the plot background
+  
+  p <- p <- ggplot(data = tseries,
+                   aes(x = t)) +
+    theme_classic() +
+    theme(
+      
+      panel.grid.major.y = element_line(color = "black",
+                                        linetype = "dotted",
+                                        size = 0.1),
+      panel.grid.minor.y = element_line(color = "black",
+                                        linetype = "dotted")
+    ) +
+    xlab("Time") +
+    ylab("Value at time t") 
+  
+  # add the layers of each random walk
+  
+  for(i in names(tseries)[-length(tseries)]){
+    p <- p +  geom_line(aes_string(y = i,
+                                   color = shQuote(rgb(viridis.map[runif(1,1,nrow(viridis.map)),1:3]))),
+                        show.legend = F)
+  }
+  
+  return(p)
 }
-colnames(tseries) <- sprintf("S%s", seq(1:repetitions))
-tseries$t <- 1:N
 
-p <- ggplot(data = tseries,
-       aes(x = t)) +
-  theme_classic() +
-  theme(
-    
-    panel.grid.major.y = element_line(color = "black",
-                                      linetype = "dotted",
-                                      size = 0.1),
-    panel.grid.minor.y = element_line(color = "black",
-                                      linetype = "dotted")
-  ) +
-  xlab("Time") +
-  ylab("Value at time t") 
-
-for(i in names(tseries)[-length(tseries)]){
-  p <- p +  geom_line(aes_string(y = i,
-                                 color = shQuote(rgb(viridis.map[runif(1,1,nrow(viridis.map)),1:3]))),
-                      show.legend = F)
-}
-plot(p)
+rw(n = 1000, repetitions = 100)
