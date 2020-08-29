@@ -3,31 +3,6 @@ library(ggplot2)
 library(tidyverse)
 library(dplyr)
 
-# ---- A first random walk simulation ----
-
-# set simulation seed
-set.seed(12345)
-
-# set lenght of the series
-N = 1000
-
-# create a random serie
-x <- e <- rnorm(n = N)
-
-# generate random walk
-for (t in 2:N){
-  x[t] <- x[t-1] + e[t]
-}
-
-tserie <- data.frame(x,
-                     t = 1:1000)
-
-# plot random walk
-ggplot(data = tserie,
-       aes(x = t,
-           y = x)) +
-  geom_line()
-
 # ---- function for several random walks ----
 
 
