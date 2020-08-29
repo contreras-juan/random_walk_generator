@@ -52,7 +52,7 @@ for(i in 1:repetitions){
 colnames(tseries) <- sprintf("S%s", seq(1:repetitions))
 tseries$t <- 1:N
 
-ggplot(data = tseries,
+p <- ggplot(data = tseries,
        aes(x = t)) +
   theme_classic() +
   theme(
@@ -64,13 +64,11 @@ ggplot(data = tseries,
                                       linetype = "dotted")
   ) +
   xlab("Time") +
-  ylab("Values at time t") +
-  geom_line(aes(y = S1,
-                color = rgb(viridis.map[runif(1,1,nrow(viridis.map)),1:3])),
-            show.legend = F) +
-  geom_line(aes(y = S2,
-                color = rgb(viridis.map[runif(1,1,nrow(viridis.map)),1:3])),
-            show.legend = F) +
-  geom_line(aes(y = S3,
-                color = rgb(viridis.map[runif(1,1,nrow(viridis.map)),1:3])),
-            show.legend = F)
+  ylab("Value at time t") 
+
+for(i in names(tseries)[-length(tseries)]){
+  p <- p +  geom_line(aes_string(y = i,
+                                 color = shQuote(rgb(viridis.map[runif(1,1,nrow(viridis.map)),1:3]))),
+                      show.legend = F)
+}
+plot(p)
