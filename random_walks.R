@@ -2,7 +2,7 @@
 library(ggplot2)
 library(tidyverse)
 library(dplyr)
-
+library(viridis)
 # ---- function for several random walks ----
 
 
