@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: "Random Walk Generator"
 author: "Juan Felipe Contreras"
@@ -62,4 +63,70 @@ ggplot(data = y,
                                       linetype = "dotted"),
     plot.title = element_text(hjust = 0.5)
   )
+=======
+---
+title: "Random Walk Generator"
+author: "Juan Felipe Contreras"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r, include=T}
+# libreries
+library(ggplot2)
+library(devtools)
+```
+
+A time series $Y_t$ is said to follow a random walk if the change in $Y_t$ is identical and independently distributed. This is:
+
+$$Y_t = Y_{t-1} + u_t $$
+
+which implies that:
+$$  \Delta Y_t = Y_t - Y_{t-1} = u_{t}$$
+
+and $u_t \sim N(0,\sigma^2)$. It is assumed that $E(u_{t}  \vert Y_{t-1}, y_{t-1},...) = 0$. 
+
+In brief, the general idea of a random walk is that the value of the series at a given period $t$ is equal to its value at $t-1$ plus a random value. This implies that the value of the serie is unpredictable, hence it is a random wak.
+
+## Let's simulate some simple random walk
+As explained above, $u_{t}$ follows a normal distribution. Thus, we have:
+```{r, include=T, echo=T}
+set.seed(1245) # set the simulation seed
+u <- rnorm(1000) # a normal distribution of length 1000
+y <- rnorm(1000) # let's assume that y also follows a normal distribution
+```
+
+Now, for $Y_{t}$ to follow a random walk, we must have that:
+```{r, include=T, echo=T}
+for(t in 2:1000){
+  
+  # the value of y at time t is equal of its previous value plus a random term
+  y[t] <- y[t-1] + u[t]
+}
+```
+
+Let's plot the result:
+```{r, include=T, echo=T}
+y <- data.frame(y,
+                time = 1:1000)
+ggplot(data = y,
+       aes(x = time,
+           y = y)) +
+  geom_line(aes(color = "darkred"),
+            show.legend = F) +
+  theme_classic() +
+  xlab("Time") +
+  ylab("Value at time t") +
+  labs(title = "A random walk") +
+  theme(
+    panel.grid.major.y = element_line(color = "black",
+                                      linetype = "dotted",
+                                      size = 0.1),
+    panel.grid.minor.y = element_line(color = "black",
+                                      linetype = "dotted"),
+    plot.title = element_text(hjust = 0.5)
+  )
+>>>>>>> ab520eb01c5be7d8f5520563f0f925492cd82624
 ```
